@@ -21,9 +21,9 @@ class Hand
   
   def name
     # TODO: remove regex/name duplication
-    throw case @cards
-    when MATCHES['one pair']: 'one pair'
-    when MATCHES['two pair']: 'two pair'
+    case @cards
+    when MATCHES['two pair'] : 'two pair'
+    when MATCHES['one pair'] : 'one pair'
     else
       'high card'
     end

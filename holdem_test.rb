@@ -12,6 +12,20 @@ class Test::Unit::TestCase
     winner, loser = Hand.new(winner), Hand.new(loser)
     assert( winner > loser )
   end
+  
+  def assert_name(hand_name, cards)
+    assert_equal hand_name, Hand.new(cards).name
+  end
+end
+
+class HandIdentificationTest < Test::Unit::TestCase
+  test "should recognise a pair" do
+    assert_name 'one pair', '2d 2s 5c 6c Ad'
+  end
+  
+  test "should recognise two pair" do
+    assert_name 'two pair', '2d 2s 5c 5d Ad'
+  end
 end
 
 class WinningHandsTest < Test::Unit::TestCase
