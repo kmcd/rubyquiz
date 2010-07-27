@@ -31,6 +31,10 @@ class HandIdentificationTest < Test::Unit::TestCase
   test "should recognise three of a kind" do
     assert_name 'three of a kind', '2d 2s 2h 5d Ad'
   end
+  
+  test "should recognise a straight" do
+    assert_name 'straight', '2d 3s 4h 5d 6d'
+  end
 end
 
 class WinningHandsTest < Test::Unit::TestCase

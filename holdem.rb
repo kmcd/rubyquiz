@@ -1,12 +1,14 @@
-require 'pp'
-
 class Hand
   include Comparable
   
   MATCHES = { 
     'one pair'        => /(\d{1,2})\w \1\w/, 
     'two pair'        => /(\d{1,2})\w \1\w.*(\d{1,2})\w \2\w/,
-    'three of a kind' => /(\d{1,2})\w \1\w \1\w/
+    'three of a kind' => /(\d{1,2})\w \1\w \1\w/,
+    
+    # OK, this is a bit crazy but straights are the hardest to match
+    # It works by building all combinations of possible straights 
+    'straight'        => Regexp.new( (0..8).map {|s| (2..14).to_a[ s..s+4 ].join ' ' }.map {|s| s.gsub /(\d{1,2})/,'\1\w' }.join('|').sub(/^/,'(').sub(/$/,')') )
   }
   
   def initialize(cards)
@@ -28,7 +30,8 @@ class Hand
   
   def name
     # TODO: remove regex/name duplication
-    case @cards
+    @name ||= case @cards
+    when MATCHES['straight']        : 'straight'
     when MATCHES['three of a kind'] : 'three of a kind'
     when MATCHES['two pair']        : 'two pair'
     when MATCHES['one pair']        : 'one pair'
