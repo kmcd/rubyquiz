@@ -1,6 +1,13 @@
+require 'pp'
+
 class Hand
-  MATCHES = { 'one pair' => /(\d{1,2})\w \1\w/, 'two pair' => /(\d{1,2})\w \1\w.*(\d{1,2})\w \2\w/}
   include Comparable
+  
+  MATCHES = { 
+    'one pair'        => /(\d{1,2})\w \1\w/, 
+    'two pair'        => /(\d{1,2})\w \1\w.*(\d{1,2})\w \2\w/,
+    'three of a kind' => /(\d{1,2})\w \1\w \1\w/
+  }
   
   def initialize(cards)
     @cards = cards
@@ -22,11 +29,16 @@ class Hand
   def name
     # TODO: remove regex/name duplication
     case @cards
-    when MATCHES['two pair'] : 'two pair'
-    when MATCHES['one pair'] : 'one pair'
+    when MATCHES['three of a kind'] : 'three of a kind'
+    when MATCHES['two pair']        : 'two pair'
+    when MATCHES['one pair']        : 'one pair'
     else
       'high card'
     end
+  end
+  
+  def pretty_print(printer)
+    printer.text [ @cards,  name, score ].join " | "
   end
   
   protected
@@ -39,6 +51,7 @@ class Hand
     case name
     when /one pair/ : 1
     when /two pair/ : 2
+    when /three/    : 3
     else
       0
     end * 1000
@@ -48,6 +61,7 @@ class Hand
     case name
     when /one pair/ : @cards[MATCHES['one pair'],1].to_i * 2
     when /two pair/ : @cards[MATCHES['two pair'],1].to_i * 2 + @cards[MATCHES['two pair'],2].to_i * 2
+    when /three/    : @cards[MATCHES['three of a kind'],1].to_i * 3
     else
       0
     end
@@ -58,6 +72,8 @@ class Hand
       when /high card/ : @cards
       when /one pair/  : @cards.gsub(MATCHES['one pair'], '')
       when /two pair/  : @cards.gsub(MATCHES['two pair'], '')
+      else
+        ''
     end.gsub /[a-z]/, ''
   end
 end

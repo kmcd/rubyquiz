@@ -3,6 +3,7 @@ $LOAD_PATH << File.join(File.dirname(__FILE__))
 require 'holdem'
 require 'rubygems'
 require 'active_support/testing/declarative'
+require 'pp'
 
 class Test::Unit::TestCase
   extend ActiveSupport::Testing::Declarative
@@ -26,6 +27,10 @@ class HandIdentificationTest < Test::Unit::TestCase
   test "should recognise two pair" do
     assert_name 'two pair', '2d 2s 5c 5d Ad'
   end
+  
+  test "should recognise three of a kind" do
+    assert_name 'three of a kind', '2d 2s 2h 5d Ad'
+  end
 end
 
 class WinningHandsTest < Test::Unit::TestCase
@@ -47,5 +52,9 @@ class WinningHandsTest < Test::Unit::TestCase
   
   test "two pair beats a pair" do
     beats 'Ad As 5c 5d Kd', 'Ac Ad 5s 6h Qd'
+  end
+  
+  test "three of a kind beats two pair" do
+    beats 'Ad As Ac 5d Kd', 'Kc Kd 5s 5h Qd'
   end
 end
