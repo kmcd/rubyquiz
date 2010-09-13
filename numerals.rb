@@ -1,18 +1,20 @@
-class Integer
+class Numeric
   def to_eng
     case self
-    when 0..19        : eng
-    when 20..99       : eng(self/10,:irregular)   + 'ty '         + (self % 10).to_eng
-    when 100..999     : eng(self/100)             + ' hundred '   + (self % 100).to_eng
-    when 1000..999999 : (self/1000).to_eng        + ' thousand '  + (self % 1000).to_eng
-    end.
+    when 0..19                          : eng
+    when 20..99                         : eng(self/10,:irregular)       + 'ty '         + (self % 10).to_eng
+    when 100..999                       : eng(self/100)                 + ' hundred '   + (self % 100).to_eng
+    when 1000..999_999                  : (self/1000).to_eng            + ' thousand '  + (self % 1000).to_eng
+    when 1_000_000..999_999_999         : (self/1_000_000).to_eng       + ' million '   + (self % 1_000_000).to_eng
+    when 1_000_000_000..999_999_999_999 : (self/1_000_000_000).to_eng   + ' billion '   + (self % 1_000_000_000).to_eng
+    end.                                   
       gsub(/\szero$/,'').
-      gsub(/(hundred|thousand)\s((\w+ty \w+)|(\w+))$/,'\1 and \2').
+      gsub(/(billion|million|hundred|thousand)\s((\w+ty \w+)|(\w+))$/,'\1 and \2').
       gsub(/(.*)\band\b(.*)\band\b(.*)/,'\1\2 and \3').
       gsub(/\s{2,}/, ' ').
       strip
   end
-  
+    
   private
   
   def eng(digit=self,irregular=false)
